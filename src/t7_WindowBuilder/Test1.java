@@ -1,129 +1,169 @@
 package t7_WindowBuilder;
 
+import java.awt.Color;
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.SwingConstants;
-import java.awt.Font;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import javax.swing.SwingConstants;
 
-@SuppressWarnings("serial")
 public class Test1 extends JFrame {
-	private JTextField txtName, txtKor, txtEng, txtMat;
-	private JButton btnInput, btnReset, btnExit;
 
-	public Test1() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 800, 600);
-		getContentPane().setLayout(null);
+    private JTextField textField;
+    private JTextField textField_1;
+    private JTextField textField_2;
+    private JTextField textField_3;
+    private JTextField textField_4;
+    private JTextField textField_5;
 
-		JLabel lblTitle = new JLabel("그린중학교 성적표");
-		lblTitle.setFont(new Font("굴림", Font.BOLD, 26));
-		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTitle.setBounds(120, 39, 549, 71);
-		getContentPane().add(lblTitle);
+    public Test1() {
+        initialize();
+    }
 
-		JLabel lblName = new JLabel("성 명");
-		lblName.setHorizontalAlignment(SwingConstants.CENTER);
-		lblName.setFont(new Font("굴림", Font.PLAIN, 20));
-		lblName.setBounds(83, 131, 117, 52);
-		getContentPane().add(lblName);
+    private void initialize() {
+        // 프레임 설정
+        setTitle("회원가입");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 513, 643);
+        getContentPane().setLayout(null);
 
-		JLabel lblKor = new JLabel("국어점수");
-		lblKor.setHorizontalAlignment(SwingConstants.CENTER);
-		lblKor.setFont(new Font("굴림", Font.PLAIN, 20));
-		lblKor.setBounds(83, 213, 117, 52);
-		getContentPane().add(lblKor);
+        // 패널 설정
+        JPanel panel = new JPanel();
+        panel.setBounds(35, 69, 427, 525);
+        getContentPane().add(panel);
+        panel.setLayout(null);
 
-		JLabel lblEng = new JLabel("영어점수");
-		lblEng.setHorizontalAlignment(SwingConstants.CENTER);
-		lblEng.setFont(new Font("굴림", Font.PLAIN, 20));
-		lblEng.setBounds(83, 292, 117, 52);
-		getContentPane().add(lblEng);
+        // 라벨들
+        JLabel lbPassword = new JLabel("아이디");
+        lbPassword.setFont(new Font("경기천년제목 Medium", Font.BOLD, 15));
+        lbPassword.setHorizontalAlignment(SwingConstants.CENTER);
+        lbPassword.setBounds(12, 10, 85, 31);
+        panel.add(lbPassword);
 
-		JLabel lblMat = new JLabel("수학점수");
-		lblMat.setHorizontalAlignment(SwingConstants.CENTER);
-		lblMat.setFont(new Font("굴림", Font.PLAIN, 20));
-		lblMat.setBounds(83, 376, 117, 52);
-		getContentPane().add(lblMat);
+        JLabel lblNewLabel_1 = new JLabel("비밀번호");
+        lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+        lblNewLabel_1.setFont(new Font("경기천년제목 Medium", Font.BOLD, 15));
+        lblNewLabel_1.setBounds(12, 81, 85, 31);
+        panel.add(lblNewLabel_1);
 
-		txtName = new JTextField();
-		txtName.setHorizontalAlignment(SwingConstants.CENTER);
-		txtName.setFont(new Font("굴림", Font.PLAIN, 20));
-		txtName.setBounds(269, 131, 297, 52);
-		getContentPane().add(txtName);
-		txtName.setColumns(10);
+        JLabel lblNewLabel_1_1 = new JLabel("이름");
+        lblNewLabel_1_1.setHorizontalAlignment(SwingConstants.CENTER);
+        lblNewLabel_1_1.setFont(new Font("경기천년제목 Medium", Font.BOLD, 15));
+        lblNewLabel_1_1.setBounds(12, 165, 85, 31);
+        panel.add(lblNewLabel_1_1);
 
-		txtKor = new JTextField();
-		txtKor.setHorizontalAlignment(SwingConstants.CENTER);
-		txtKor.setFont(new Font("굴림", Font.PLAIN, 20));
-		txtKor.setColumns(10);
-		txtKor.setBounds(269, 213, 297, 52);
-		getContentPane().add(txtKor);
+        JLabel lbBirth = new JLabel("생년월일");
+        lbBirth.setHorizontalAlignment(SwingConstants.CENTER);
+        lbBirth.setFont(new Font("경기천년제목 Medium", Font.BOLD, 15));
+        lbBirth.setBounds(12, 252, 85, 31);
+        panel.add(lbBirth);
 
-		txtEng = new JTextField();
-		txtEng.setHorizontalAlignment(SwingConstants.CENTER);
-		txtEng.setFont(new Font("굴림", Font.PLAIN, 20));
-		txtEng.setColumns(10);
-		txtEng.setBounds(269, 292, 297, 52);
-		getContentPane().add(txtEng);
+        JLabel lbGender = new JLabel("성별");
+        lbGender.setHorizontalAlignment(SwingConstants.CENTER);
+        lbGender.setFont(new Font("경기천년제목 Medium", Font.BOLD, 15));
+        lbGender.setBounds(12, 340, 85, 31);
+        panel.add(lbGender);
 
-		txtMat = new JTextField();
-		txtMat.setHorizontalAlignment(SwingConstants.CENTER);
-		txtMat.setFont(new Font("굴림", Font.PLAIN, 20));
-		txtMat.setColumns(10);
-		txtMat.setBounds(269, 376, 297, 52);
-		getContentPane().add(txtMat);
+        // 텍스트 필드들
+        textField = new JTextField();
+        textField.setForeground(Color.LIGHT_GRAY);
+        textField.setBounds(47, 37, 350, 35);
+        panel.add(textField);
+        textField.setColumns(10);
 
-		btnInput = new JButton("입 력");
-		btnInput.setFont(new Font("굴림", Font.PLAIN, 20));
-		btnInput.setBounds(122, 464, 184, 41);
-		getContentPane().add(btnInput);
+        textField_1 = new JTextField();
+        textField_1.setForeground(Color.LIGHT_GRAY);
+        textField_1.setColumns(10);
+        textField_1.setBounds(47, 111, 350, 35);
+        panel.add(textField_1);
 
-		btnReset = new JButton("다시입력");
-		btnReset.setFont(new Font("굴림", Font.PLAIN, 20));
-		btnReset.setBounds(333, 464, 184, 41);
-		getContentPane().add(btnReset);
+        textField_2 = new JTextField();
+        textField_2.setForeground(Color.LIGHT_GRAY);
+        textField_2.setColumns(10);
+        textField_2.setBounds(47, 195, 350, 35);
+        panel.add(textField_2);
 
-		btnExit = new JButton("종  료");
-		btnExit.setFont(new Font("굴림", Font.PLAIN, 20));
-		btnExit.setBounds(537, 464, 184, 41);
-		getContentPane().add(btnExit);
+        textField_4 = new JTextField();
+        textField_4.setBounds(47, 293, 100, 35);
+        panel.add(textField_4);
+        textField_4.setColumns(10);
 
-		// 위쪽은 디자인
-		setVisible(true);
-		// 아래쪽은 메소드
+        JComboBox comboBox = new JComboBox();
+        comboBox.setBounds(162, 293, 100, 35);
+        panel.add(comboBox);
 
-		btnInput.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
+        textField_5 = new JTextField();
+        textField_5.setBounds(281, 293, 100, 35);
+        panel.add(textField_5);
+        textField_5.setColumns(10);
 
-		// 다시입력 버튼
-		btnReset.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				txtName.setText("");
-				txtKor.setText("");
-				txtEng.setText("");
-				txtMat.setText("");
-				txtName.requestFocus();
-			}
-		});
+        // 라디오 버튼들
+        JRadioButton rdbtnNewRadioButton = new JRadioButton("여 자");
+        rdbtnNewRadioButton.setHorizontalAlignment(SwingConstants.CENTER);
+        rdbtnNewRadioButton.setFont(new Font("굴림", Font.PLAIN, 14));
+        rdbtnNewRadioButton.setBounds(60, 377, 132, 41);
+        panel.add(rdbtnNewRadioButton);
 
-		// 종료버튼
-		btnExit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				int ans = JOptionPane.showConfirmDialog(null, "작업을 종료하시겠습니까?", "", JOptionPane.YES_NO_OPTION);
-				if (ans == 0)
-					System.exit(0);
-			}
-		});
-	}
+        JRadioButton rdbtnNewRadioButton_1 = new JRadioButton("남자");
+        rdbtnNewRadioButton_1.setHorizontalAlignment(SwingConstants.CENTER);
+        rdbtnNewRadioButton_1.setFont(new Font("굴림", Font.PLAIN, 14));
+        rdbtnNewRadioButton_1.setBounds(215, 377, 132, 41);
+        panel.add(rdbtnNewRadioButton_1);
 
-	public static void main(String[] args) {
-		new Test1();
-	}
+        // 버튼
+        JButton btnNewButton = new JButton("가입하기");
+        btnNewButton.setFont(new Font("문체부 제목 돋음체", Font.PLAIN, 17));
+        btnNewButton.setBounds(47, 430, 338, 50);
+        panel.add(btnNewButton);
+
+        // 라벨
+        JLabel lb1 = new JLabel("NAVER");
+        lb1.setHorizontalAlignment(SwingConstants.CENTER);
+        lb1.setFont(new Font("굴림", Font.BOLD, 24));
+        lb1.setBounds(157, 0, 143, 80);
+        getContentPane().add(lb1);
+
+        // 가입하기 버튼에 대한 액션 리스너
+        btnNewButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // 아이디 유효성 검사 수행
+                String id = textField.getText();
+                if (isValidID(id)) {
+                    // 유효한 아이디일 경우 가입 처리를 수행할 수 있음
+                    System.out.println("유효한 아이디입니다: " + id);
+                } else {
+                    // 유효하지 않은 아이디일 경우 메시지 표시
+                    System.out.println("유효하지 않은 아이디입니다.");
+                }
+            }
+        });
+    }
+
+    // 아이디 유효성 검사 메소드
+    private boolean isValidID(String id) {
+        // 소문자 영어, 숫자, 밑줄(_)로만 이루어진 문자열인지 확인하는 정규표현식
+        String regex = "^[a-z0-9_]+$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(id);
+        return matcher.matches();
+    }
+
+    public static void main(String[] args) {
+    	new Test1();
+    	
+       
+    }
+    
+
+
 }
