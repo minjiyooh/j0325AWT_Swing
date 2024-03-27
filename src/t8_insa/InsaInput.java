@@ -12,6 +12,8 @@ import javax.swing.ButtonGroup;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.regex.Pattern;
 import java.awt.event.ActionEvent;
 
@@ -20,6 +22,8 @@ public class InsaInput extends JFrame {
 	private JButton btnInput, btnReset, btnClose;
 	private JTextField txtName, txtAge;
 	private final ButtonGroup btnGroupGender = new ButtonGroup();
+	JRadioButton rdGenderMale, rdGenderFeMale;
+	
 	@SuppressWarnings("rawtypes")
 	JComboBox cbYY, cbMM, cbDD;
 	
@@ -88,13 +92,13 @@ public class InsaInput extends JFrame {
 		txtAge.setBounds(330, 135, 290, 45);
 		pn2.add(txtAge);
 		
-		JRadioButton rdGenderMale = new JRadioButton("남  자");
+		rdGenderMale = new JRadioButton("남  자");
 		btnGroupGender.add(rdGenderMale);
 		rdGenderMale.setFont(new Font("굴림", Font.PLAIN, 20));
 		rdGenderMale.setBounds(342, 225, 106, 45);
 		pn2.add(rdGenderMale);
 		
-		JRadioButton rdGenderFeMale = new JRadioButton("여  자");
+		rdGenderFeMale = new JRadioButton("여  자");
 		btnGroupGender.add(rdGenderFeMale);
 		rdGenderFeMale.setSelected(true);
 		rdGenderFeMale.setFont(new Font("굴림", Font.PLAIN, 20));
@@ -168,6 +172,14 @@ public class InsaInput extends JFrame {
 		btnClose.setBounds(541, 10, 185, 56);
 		pn3.add(btnClose);
 		
+		
+		// 오늘날짜 가져와서 가입화면에 뿌려주기...
+		InsaService service = new InsaService();
+		vo = service.getDefaultDate();
+		cbYY.setSelectedItem(vo.getCbYY());
+		cbMM.setSelectedItem(vo.getCbMM());
+		cbDD.setSelectedItem(vo.getCbDD());
+		
 		// --------------------- 위쪽은 UI ----------------------------------------
 		setLocationRelativeTo(null);	// 윈도우창을 가운데 정렬
 		setResizable(false);
@@ -175,54 +187,20 @@ public class InsaInput extends JFrame {
 		setVisible(true);
 		// --------------------- 아래쪽은 메소드 ----------------------------------------
 
-		// 회원가입 버튼
+		
+		// 회원가입 버튼을 키보드 엔터키를 쳤을때 수행처리
+		btnInput.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				setInsaInput();
+			}
+		});
+		
+		
+		// 회원가입 버튼을 마우스로 클릭했을때 수행처리
 		btnInput.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String name = txtName.getText().trim();
-				String age = txtAge.getText().trim();
-				String gender = "";
-				String ipsail = cbYY.getSelectedItem()+"-"+cbMM.getSelectedItem()+"-"+cbDD.getSelectedItem();
-				
-				// 유효성 검사
-				if(name.equals("")) {
-			    JOptionPane.showMessageDialog(null, "성명을 입력하세요");
-			    txtName.requestFocus();
-				}
-				else if(!Pattern.matches("^[0-9]+$", age)) {
-					JOptionPane.showMessageDialog(null, "나이는 숫자로 입력하세요");
-					txtAge.requestFocus();
-				}
-				else {
-					if(rdGenderMale.isSelected()) gender = "남자";
-					else gender = "여자";
-					
-					// 모든체크가 끝나면 DB에 새로운 회원을 가입처리한다.
-					// 회원명 중복처리
-					vo = dao.getNameSearch(name);
-					if(vo.getName() != null) {
-						JOptionPane.showMessageDialog(null, "이미 가입된 회원입니다. 다시 성명을 입력해 주세요.");
-						txtName.requestFocus();
-					}
-					else {
-						// 정상적으로 자료가 입력되었다면 vo에 값을 담아서 DB에 저장한다.
-						vo.setName(name);
-						vo.setAge(Integer.parseInt(age));
-						vo.setGender(gender);
-						vo.setIpsail(ipsail);
-						
-						res = dao.setInsaInput(vo);
-						
-						if(res != 0) {
-							JOptionPane.showMessageDialog(null, "회원에 가입되셨습니다.");
-							dispose();
-							new InsaMain();
-						}
-						else {
-							JOptionPane.showMessageDialog(null, "회원 가입 실패~~ 다시 가입해 주세요.");
-							txtName.requestFocus();
-						}
-					}
-				}
+				setInsaInput();
 			}
 		});
 		
@@ -244,6 +222,55 @@ public class InsaInput extends JFrame {
 			}
 		});
 		
+	}
+
+	// 회원 가입처리를 위한 메소드
+	protected void setInsaInput() {
+		String name = txtName.getText().trim();
+		String age = txtAge.getText().trim();
+		String gender = "";
+		String ipsail = cbYY.getSelectedItem()+"-"+cbMM.getSelectedItem()+"-"+cbDD.getSelectedItem();
+		
+		// 유효성 검사
+		if(name.equals("")) {
+	    JOptionPane.showMessageDialog(null, "성명을 입력하세요");
+	    txtName.requestFocus();
+		}
+		else if(!Pattern.matches("^[0-9]+$", age)) {
+			JOptionPane.showMessageDialog(null, "나이는 숫자로 입력하세요");
+			txtAge.requestFocus();
+		}
+		else {
+			if(rdGenderMale.isSelected()) gender = "남자";
+			else gender = "여자";
+			
+			// 모든체크가 끝나면 DB에 새로운 회원을 가입처리한다.
+			// 회원명 중복처리
+			vo = dao.getNameSearch(name);
+			if(vo.getName() != null) {
+				JOptionPane.showMessageDialog(null, "이미 가입된 회원입니다. 다시 성명을 입력해 주세요.");
+				txtName.requestFocus();
+			}
+			else {
+				// 정상적으로 자료가 입력되었다면 201행의 vo에는 null값이 오기에, 입력받은값들을 vo에 담아서 DB에 저장한다.
+				vo.setName(name);
+				vo.setAge(Integer.parseInt(age));
+				vo.setGender(gender);
+				vo.setIpsail(ipsail);
+				
+				res = dao.setInsaInput(vo);
+				
+				if(res != 0) {
+					JOptionPane.showMessageDialog(null, "회원에 가입되셨습니다.");
+					dispose();
+					new InsaMain();
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "회원 가입 실패~~ 다시 가입해 주세요.");
+					txtName.requestFocus();
+				}
+			}
+		}
 	}
 	
 //	public static void main(String[] args) {

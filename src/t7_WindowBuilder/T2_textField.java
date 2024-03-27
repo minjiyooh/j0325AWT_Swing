@@ -17,7 +17,7 @@ import javax.swing.SwingConstants;
 import javax.swing.ImageIcon;
 import javax.swing.JPasswordField;
 
-@SuppressWarnings("serial")
+@SuppressWarnings({"serial" ,"deprecation"})
 public class T2_textField extends JFrame {
 	private JTextField txtMid, txtName, txtAge;
 	private JButton btnSubmit, btnReset, btnExit;
@@ -135,6 +135,7 @@ public class T2_textField extends JFrame {
 		
 		// 회원가입 버튼
 		btnSubmit.addActionListener(new ActionListener() {
+			
 			public void actionPerformed(ActionEvent e) {
 				if(txtMid.getText().trim().equals("")) {
 					JOptionPane.showMessageDialog(null, "아이디를 입력하세요");
